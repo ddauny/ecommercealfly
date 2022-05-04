@@ -66,7 +66,7 @@
 					<?php if (!isset($_SESSION["id"])) echo "<li class='nav-item'><a href='login.php' class='nav-link'>Login</a></li>";
 					else echo "<li class='nav-item'><a href='logout.php' class='nav-link'>Logout</a></li>"; ?>
 					<?php if (isset($_SESSION["admin"]) && $_SESSION["admin"] == 1) echo "<li class='nav-item'><a href='addArticolo.php' class='nav-link'>Aggiungi</a></li>"; ?>
-					<li class="nav-item cta cta-colored"><a href="cart.html" class="nav-link"><span class="icon-shopping_cart"></span>[<?php
+					<li class="nav-item cta cta-colored"><a href="cart.php" class="nav-link"><span class="icon-shopping_cart"></span>[<?php
 																																		include("connection.php");
 																																		if (isset($_SESSION["idCarrello"])) {
 																																			$sql = "select count(*) from contiene where IDCarrello = $_SESSION[idCarrello]";
@@ -90,8 +90,8 @@
 		<div class="container">
 			<div class="row no-gutters slider-text align-items-center justify-content-center">
 				<div class="col-md-9 ftco-animate text-center">
-					<p class="breadcrumbs"><span class="mr-2"><a href="index.html">Home</a></span> <span>Cart</span></p>
-					<h1 class="mb-0 bread">My Wishlist</h1>
+					<p class="breadcrumbs"><span class="mr-2"><a href="index.php">Home</a></span> <span>Carrello</span></p>
+					<h1 class="mb-0 bread">Carrello</h1>
 				</div>
 			</div>
 		</div>
@@ -118,13 +118,13 @@
 
 								if (isset($_SESSION["idCarrello"])) {
 								//	echo $_SESSION["idCarrello"];
-									$sql = "select articoli.prezzo, contiene.quantita, articoli.nome, articoli.descrizione, articoli.img from carrelli join contiene on carrelli.ID = contiene.IDCarrello join articoli on contiene.IDArticolo = articoli.ID where carrelli.ID = $_SESSION[idCarrello] ";
+									$sql = "select articoli.prezzo, contiene.quantita, articoli.nome, articoli.ID, articoli.descrizione, articoli.img from carrelli join contiene on carrelli.ID = contiene.IDCarrello join articoli on contiene.IDArticolo = articoli.ID where carrelli.ID = $_SESSION[idCarrello] ";
 									$result = $conn->query($sql);
 									$_SESSION["totale"] = 0;
 									if ($result != null) { //se il carrello ha qualche articolo
 										while ($row = $result->fetch_assoc()) {
 											echo "<tr class='text-center'>";
-											echo "<td class='product-remove'><a href='#'><span class='ion-ios-close'></span></a></td>";
+											echo "<td class='product-remove'><a href='removeCart.php?id=$row[ID]'><span class='ion-ios-close'></span></a></td>";
 											echo "<td class='image-prod'><div class='img' style='background-image:url($row[img]);'></div></td>";
 											echo "<td class='product-name'><h3>$row[nome]</h3><p>$row[descrizione]</p></td><td class='price'>€$row[prezzo]</td>";
 											echo "<td class='quantity'><p>$row[quantita]</p> </div></td><td class='total'>";
@@ -149,7 +149,7 @@
 						<h3>Totale carrello</h3>
 						<p class="d-flex">
 							<span>Subtotale</span>
-							<span>€<?php echo $_SESSION["totale"] ?></span>
+							<span>€<?php if(isset($_SESSION["totale"])) echo $_SESSION["totale"]; else echo "0"; ?></span>
 						</p>
 						<p class="d-flex">
 							<span>Consegna</span>
@@ -158,7 +158,7 @@
 						<hr>
 						<p class="d-flex total-price">
 							<span>Total</span>
-							<span>€<?php echo ($_SESSION["totale"] + 2)?> </span>
+							<span>€<?php if(isset($_SESSION["totale"])) echo $_SESSION["totale"] + 2; else echo "0";?> </span>
 						</p>
 					</div>
 					<p class="text-center"><a href="checkout.php" class="btn btn-primary py-3 px-4">Vai al pagamento</a></p>

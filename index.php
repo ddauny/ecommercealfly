@@ -165,6 +165,7 @@
 						echo "<h3><a href='#'>$row[nome]</a></h3>"; //nome
 						echo "<div class='pricing'><p class='price'><span>€$row[prezzo]</span></p></div>"; //prezzo
 						echo "<p class='bottom-area d-flex px-3'><a href='addCart.php?id=$row[ID]&q=1' class='add-to-cart text-center py-2 mr-1'><span>Aggiungi al carrello<i class='ion-ios-add ml-1'></i></span></a></p>";
+						if(isset($_SESSION["admin"]) && $_SESSION["admin"] == 1) echo "<p class=''><a href='deleteArticolo.php?id=$row[ID]' class=' text-center py-2 mr-1'><span>Elimina articolo<i class=' ml-1'></i></span></a></p>";
 						echo "</div></div></div>";
 					}
 				} else {
